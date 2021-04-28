@@ -3,6 +3,9 @@ Config = {}
 -- 15 minutes for saving to the DB
 Config.SaveInterval  = 1000 * 60 * 15
 
+-- Should we save players aswell?
+Config.SavePlayers = true
+
 -- Is debug allowed?
 Config.Debug = true
 

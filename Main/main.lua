@@ -46,25 +46,31 @@ function DoesAccountExists(accountName)
     return AccountNameList[accountName] ~= nil
 end
 
+exports('DoesAccountExists', DoesAccountExists)
+
 --- Will return account module from owner
 --- @param name string
 --- @param owner string
 function GetAccount(name, owner)
-    if not AddonAccountList[name] and not SharedAccount[name] then
+    if not DoesAccountExists(name) then
         Debug.critical("Account [%s] does not exists!", name)
         return nil
     end
     return AddonAccountList[name][owner]
 end
 
+exports('GetAccount', GetAccount)
+
 --- Will return shared account module
 --- @param name string
 function GetSharedAccount(name)
-    if not SharedAccount[name] then
+    if not DoesAccountExists(name) then
         Debug.critical("Account [%s] does not exists!", name)
     end
     return SharedAccount[name]
 end
+
+exports('GetSharedAccount', GetSharedAccount)
 
 --- Will load all accounts
 function LoadAllAccounts()
@@ -72,6 +78,7 @@ function LoadAllAccounts()
     for k, v in pairs(addonAccounts) do
         local result = MySQL.Sync.fetchAll("SELECT * FROM addon_account_data WHERE account_name = @account_name", { ["@account_name"] = v.name })
         AccountNameList[v.name] = true
+        Debug.info("Loading account [%s]", v.name)
         local shared = GetBooleanFromNumber(v.shared)
         if shared then
             local account = CreateAddonAccount()
@@ -110,6 +117,7 @@ function LoadAllAccounts()
     end
 
     TriggerEvent("esx:addonAccountsLoaded")
+    TriggerEvent("rcore:addonAccountsLoaded")
 end
 
 --- Will save all shared accounts
@@ -161,6 +169,11 @@ CreateThread(function()
         Wait(Config.SaveInterval)
         Debug.info("Saving all shared accounts")
         SaveAllAccounts()
+
+        if Config.SavePlayers then
+            SaveAllOnlinePlayers()
+        end
+
         Debug.info("Done with saving!")
     end
 end)
