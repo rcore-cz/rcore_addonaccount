@@ -5,12 +5,14 @@
 -- so we dont have to load it over and over
 Debug = rdebug()
 
--- ESX Variable that hold es_extended module
+-- ESX Variable that holds es_extended module
 ESX = nil
+
+-- Array that just holds all accounts names
+AccountNameList = {}
 
 -- Array variables that holds all modules from System/Accounts.lua
 AddonAccountList = {}
-AccountNameList = {}
 SharedAccount = {}
 -------------------------------------------------
 -- Init
@@ -88,6 +90,7 @@ function LoadAllAccounts()
             account.setAccountName(v.name)
 
             SharedAccount[v.name] = account
+
             account.setMoney(money)
         else
             AddonAccountList[v.name] = {}
