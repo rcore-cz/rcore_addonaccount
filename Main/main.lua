@@ -99,6 +99,9 @@ function LoadAllAccounts()
             SharedAccount[v.name] = account
 
             account.setMoney(money)
+            if Debug and Debug.info then
+                Debug.info("Creating shared society: ", v.name)
+            end
         else
             AddonAccountList[v.name] = {}
 
