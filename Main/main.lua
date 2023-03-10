@@ -6,7 +6,7 @@
 Debug = rdebug()
 
 -- ESX Variable that holds es_extended module
-ESX = nil
+ESX = GetEsxObject()
 
 -- Array that just holds all accounts names
 AccountNameList = {}
@@ -14,10 +14,6 @@ AccountNameList = {}
 -- Array variables that holds all modules from System/Accounts.lua
 AddonAccountList = {}
 SharedAccount = {}
--------------------------------------------------
--- Init
--------------------------------------------------
-TriggerEvent("esx:getSharedObject", function(module) ESX = module end)
 -------------------------------------------------
 -- Function list
 -------------------------------------------------
