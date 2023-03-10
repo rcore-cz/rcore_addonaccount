@@ -1,6 +1,6 @@
 # rcore_addonaccount
 
-optimization and replacement for "esx_addonaccount"
+More safe version of esx_addonaccount
 
 ## Installation
 
