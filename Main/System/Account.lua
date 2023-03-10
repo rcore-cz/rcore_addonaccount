@@ -6,6 +6,7 @@ function CreateAddonAccount()
     self.OwnerIdentifier = nil
     self.IsShared = false
     self.money = 0
+    self.fakeMoney = 0
 
     -- will set a new value to variable "IsShared"
     self.setAccountShared = function(shared)
@@ -78,6 +79,9 @@ function CreateAddonAccount()
                 GetAccount(self.nameAccount, self.OwnerIdentifier).money = money
             end
             TriggerClientEvent("esx_addonaccount:setMoney", -1, self.getAccountName(), self.getMoney())
+        else
+            print(("Warning! Society %s doesnt exists!"):format(self.nameAccount))
+            self.fakeMoney = money
         end
     end
 
@@ -89,6 +93,9 @@ function CreateAddonAccount()
             else
                 return GetAccount(self.nameAccount, self.OwnerIdentifier).money
             end
+        else
+            print(("Warning! Society %s doesnt exists!"):format(self.nameAccount))
+            return self.fakeMoney
         end
     end
 
@@ -101,6 +108,9 @@ function CreateAddonAccount()
     -- will check if does not exists + will create data for everything.
     self.create = function()
         if not DoesAccountExists(self.getAccountName()) then
+
+            self.money = self.money + self.fakeMoney
+
             AccountNameList[self.getAccountName()] = true
             Debug.info("Creating a new account data [%s] from resource [%s]", self.getAccountName(), GetInvokingResource() or GetCurrentResourceName())
 
