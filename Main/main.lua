@@ -140,15 +140,17 @@ end
 --- Will save player account data
 function SavePlayerData(playerID)
     local xPlayer = ESX.GetPlayerFromId(playerID)
-    local account
-    for name, _ in pairs(AccountNameList) do
-        account = GetAccount(name, xPlayer.identifier)
-        if account then
-            MySQL.Async.execute("UPDATE addon_account_data SET money = @money WHERE account_name = @account_name AND owner = @owner", {
-                ["@account_name"] = name,
-                ["@money"] = account.getMoney(),
-                ["@owner"] = xPlayer.identifier,
-            })
+    if xPlayer then
+        local account
+        for name, _ in pairs(AccountNameList) do
+            account = GetAccount(name, xPlayer.identifier)
+            if account then
+                MySQL.Async.execute("UPDATE addon_account_data SET money = @money WHERE account_name = @account_name AND owner = @owner", {
+                    ["@account_name"] = name,
+                    ["@money"] = account.getMoney(),
+                    ["@owner"] = xPlayer.identifier,
+                })
+            end
         end
     end
 end
