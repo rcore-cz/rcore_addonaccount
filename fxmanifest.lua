@@ -5,8 +5,6 @@ author 'rcore.cz'
 description 'Remake of esx_addonaccount'
 version '1.0.0'
 
-server_only 'yes'
-
 server_scripts {
     "config.lua",
 
