@@ -44,12 +44,25 @@ end
 
 exports('DoesAccountExists', DoesAccountExists)
 
+--- Will return true/false if the key in account exists
+--- @param accountName string
+function DoesKeyExistsInAccount(accountName, key)
+    return AddonAccountList[accountName][key] ~= nil
+end
+
+exports('DoesKeyExistsInAccount', DoesKeyExistsInAccount)
+
 --- Will return account module from owner
 --- @param name string
 --- @param owner string
 function GetAccount(name, owner)
     if not DoesAccountExists(name) then
         Debug.critical("Account [%s] does not exists!", name)
+        return nil
+    end
+
+    if not DoesKeyExistsInAccount(name, owner) then
+        Debug.critical("Account [%s] exists but key [%s] does not!", name, owner)
         return nil
     end
     return AddonAccountList[name][owner]
