@@ -62,7 +62,7 @@ exports('DoesKeyExistsInAccount', DoesKeyExistsInAccount)
 --- @param name string
 --- @param owner string
 function GetAccount(name, owner)
-    if not DoesAccountExists(name) or not DoesKeyExistsInAccount(name) then
+    if not DoesAccountExists(name) then
         Debug.critical("Account [%s] does not exists!", name)
         return nil
     end
@@ -121,15 +121,17 @@ function LoadAllAccounts()
             AddonAccountList[v.name] = {}
 
             for _, data in pairs(result) do
-                local account = CreateAddonAccount()
+                if data.owner then
+                    local account = CreateAddonAccount()
 
-                account.setOwnerIdentifier(data.owner)
-                account.setAccountShared(false)
-                account.setAccountName(v.name)
+                    account.setOwnerIdentifier(data.owner)
+                    account.setAccountShared(false)
+                    account.setAccountName(v.name)
 
-                AddonAccountList[v.name][data.owner] = account
+                    AddonAccountList[v.name][data.owner] = account
 
-                account.setMoney(data.money)
+                    account.setMoney(data.money)
+                end
             end
         end
     end
@@ -161,7 +163,7 @@ function SavePlayerData(playerID)
     local xPlayer = ESX.GetPlayerFromId(playerID)
     if xPlayer then
         local account
-        for name, _ in pairs(AccountNameList) do
+        for name, _ in pairs(AddonAccountList) do
             account = GetAccount(name, xPlayer.identifier)
             if account then
                 MySQL.Async.execute("UPDATE addon_account_data SET money = @money WHERE account_name = @account_name AND owner = @owner", {
